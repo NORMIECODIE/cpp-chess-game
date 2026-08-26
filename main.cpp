@@ -101,12 +101,92 @@ int main()
             continue;
         }
 
-        // Move the piece
-        board[toRow][toCol] = board[fromRow][fromCol];
-        board[fromRow][fromCol] = '.';
+        // Check if the move is valid
+bool validMove = false;
 
-        // Change turn
-        whiteTurn = !whiteTurn;
+char piece = board[fromRow][fromCol];
+
+// White Pawn
+if (piece == 'P')
+{
+    // Move one square forward
+    if (fromCol == toCol &&
+        toRow == fromRow - 1 &&
+        board[toRow][toCol] == '.')
+    {
+        validMove = true;
+    }
+
+    // Move two squares forward from starting position
+    else if (fromCol == toCol &&
+             fromRow == 6 &&
+             toRow == fromRow - 2 &&
+             board[toRow][toCol] == '.' &&
+             board[fromRow - 1][fromCol] == '.')
+    {
+        validMove = true;
+    }
+
+    // Capture diagonally
+    else if ((toCol == fromCol - 1 || toCol == fromCol + 1) &&
+             toRow == fromRow - 1 &&
+             board[toRow][toCol] >= 'a' &&
+             board[toRow][toCol] <= 'z')
+    {
+        validMove = true;
+    }
+}
+
+// Black Pawn
+else if (piece == 'p')
+{
+    // Move one square forward
+    if (fromCol == toCol &&
+        toRow == fromRow + 1 &&
+        board[toRow][toCol] == '.')
+    {
+        validMove = true;
+    }
+
+    // Move two squares forward from starting position
+    else if (fromCol == toCol &&
+             fromRow == 1 &&
+             toRow == fromRow + 2 &&
+             board[toRow][toCol] == '.' &&
+             board[fromRow + 1][fromCol] == '.')
+    {
+        validMove = true;
+    }
+
+    // Capture diagonally
+    else if ((toCol == fromCol - 1 || toCol == fromCol + 1) &&
+             toRow == fromRow + 1 &&
+             board[toRow][toCol] >= 'A' &&
+             board[toRow][toCol] <= 'Z')
+    {
+        validMove = true;
+    }
+}
+
+// Other pieces temporarily move freely
+else
+{
+    validMove = true;
+}
+
+// Stop invalid moves
+if (!validMove)
+{
+    cout << "Invalid move for this piece!\n";
+    continue;
+}
+
+// Move the piece
+board[toRow][toCol] = piece;
+board[fromRow][fromCol] = '.';
+
+// Change turn
+whiteTurn = !whiteTurn;
     }
 
     return 0;
